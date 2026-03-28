@@ -10,6 +10,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
         body { background-color: #ffffff; color: #333; line-height: 1.6; overflow-x: hidden; }
 
+        /* MENU FIXO */
         header {
             background-color: #101c3d;
             padding: 15px 5%;
@@ -18,10 +19,10 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-
-        .logo { color: white; font-weight: bold; font-size: 20px; text-align: center; }
-        .logo p { font-size: 10px; letter-spacing: 1px; }
 
         nav {
             display: flex;
@@ -30,7 +31,14 @@
             padding: 15px 5%;
             border-bottom: 1px solid #eee;
             flex-wrap: wrap;
+            background-color: white;
+            position: sticky;
+            top: 70px; 
+            z-index: 999;
         }
+
+        .logo { color: white; font-weight: bold; font-size: 20px; text-align: center; }
+        .logo p { font-size: 10px; letter-spacing: 1px; }
 
         .nav-item { text-align: center; font-size: 12px; color: #555; cursor: pointer; min-width: 60px; }
         .nav-item i { display: block; font-size: 20px; margin-bottom: 5px; font-style: normal; }
@@ -49,14 +57,15 @@
             position: relative;
             border-radius: 15px;
             overflow: hidden;
-            height: 400px;
+            height: 450px; 
             background-color: #000;
         }
 
         .slide {
             position: absolute;
             inset: 0;
-            background-size: cover;
+            background-size: cover; 
+            background-repeat: no-repeat;
             background-position: center;
             display: flex;
             flex-direction: column;
@@ -69,12 +78,13 @@
         }
 
         .slide.active { opacity: 1; z-index: 2; }
-        .slide::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            z-index: -1;
+        
+        .carousel-content {
+            z-index: 3;
+            background: rgba(0,0,0,0.4);
+            padding: 10px;
+            border-radius: 8px;
+            align-self: flex-start;
         }
 
         .badge {
@@ -86,14 +96,14 @@
             text-transform: uppercase;
             border-radius: 3px;
             display: inline-block;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
-        .carousel h2 { font-size: 24px; margin-bottom: 10px; }
+        .carousel h2 { font-size: 22px; margin: 0; }
 
         .carousel-indicators {
             position: absolute;
-            bottom: 20px;
+            bottom: 15px;
             left: 30px;
             right: 30px;
             display: flex;
@@ -120,10 +130,7 @@
             display: flex;
             flex-direction: column;
         }
-        .video-thumb {
-            width: 100%;
-            height: 150px;
-        }
+        .video-thumb { width: 100%; height: 150px; }
         .video-thumb iframe { width: 100%; height: 100%; border: 0; }
         .video-info { padding: 15px; }
         .video-info h3 { font-size: 16px; margin-bottom: 5px; }
@@ -146,10 +153,7 @@
             overflow: hidden;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         .terapia-text h2 { font-size: 28px; color: #101c3d; margin-bottom: 15px; }
 
         /* --- SEÇÃO DE MEMBROS --- */
@@ -198,17 +202,8 @@
             background-position: center;
         }
         .member-info { padding: 20px; }
-        .member-info h4 {
-            font-size: 18px;
-            color: #101c3d;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
-        .member-info p {
-            font-size: 14px;
-            color: #666;
-            font-weight: bold;
-        }
+        .member-info h4 { font-size: 18px; color: #101c3d; margin-bottom: 5px; text-transform: uppercase; }
+        .member-info p { font-size: 14px; color: #666; font-weight: bold; }
 
         /* --- CARROSSEL INSTAGRAM --- */
         .instagram-carousel-container {
@@ -241,7 +236,7 @@
         .arrow-left { left: 25px; }
         .arrow-right { right: 25px; }
 
-        /* --- MODAL DOAÇÃO --- */
+        /* --- MODAL ESTILOS --- */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -267,6 +262,7 @@
             width: 35px; height: 35px;
             border-radius: 50%;
             cursor: pointer;
+            z-index: 2001;
         }
 
         /* --- Footer --- */
@@ -284,68 +280,98 @@
             gap: 30px;
         }
 
+        /* --- ALTERAÇÃO AQUI: RESPONSIVIDADE CELULAR --- */
         @media (max-width: 768px) {
             .main-container, .terapia-section, .members-grid { grid-template-columns: 1fr; }
-            .carousel { height: 300px; }
+            
+            .carousel { 
+                height: 250px; /* Reduzi a altura para não ficar um quadrado gigante */
+                aspect-ratio: auto; 
+                background-color: #000;
+            }
+            
+            .slide {
+                background-size: contain; /* Garante que a arte horizontal apareça sem cortes */
+                background-position: center center;
+                justify-content: flex-end;
+                padding: 10px;
+            }
+
+            .carousel-content {
+                background: rgba(0,0,0,0.7);
+                width: 100%;
+                padding: 5px 10px;
+            }
+
+            .carousel h2 { font-size: 15px; }
+            .badge { font-size: 8px; }
+
+            nav { top: 60px; } 
+            
+            .carousel-indicators {
+                bottom: 8px;
+                left: 10px;
+                right: 10px;
+                gap: 5px;
+            }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo" style=" margin: auto">
+        <div class="logo" style="margin: auto">
             ♥ ASSEMBLEIA DE DEUS ♥
             <p>MISSÃO SALVANDO VIDAS</p>
         </div>
-        
     </header>
 
     <nav>
        <a href="#"> <div class="nav-item"><i>🏠</i>Home</div></a>
         <div class="nav-item" id="btnDoacao"><i>💰</i>Doação</div>
-      
        <a href="#membros"> <div class="nav-item"><i>📍</i>Membros</div></a>
         <a href="#footer"> <div class="nav-item"><i>👥</i>Endereços</div></a>
     </nav>
 
     <div class="main-container">
         <div class="carousel" id="universalCarousel">
-            <div class="slide active" style="background-image: url('./carrocel1.webp');">
+            <div class="slide active" style="background-image: url('./CULTO\ E\ LIBERTAÇÃO.webp');">
                 <div class="carousel-content">
-                    <span class="badge">Fé Inteligente</span>
-                    <h2>O Poder da Oração da Meia-Noite</h2>
+                    <span class="badge">CULTO</span>
+                    <h2>DE CURA E LIBERTAÇÃO</h2>
                 </div>
             </div>
-            <div class="slide" style="background-image: url('./carrocel2.webp');">
+            <div class="slide" style="background-image: url('./CULTO\ AGRADECIMENTO.webp');">
                 <div class="carousel-content">
-                    <span class="badge">Família</span>
-                    <h2>Restaurando Laços Perdidos</h2>
+                    <span class="badge">CULTO</span>
+                    <h2>DE AGRADECIMENTO</h2>
                 </div>
             </div>
-             <div class="slide" style="background-image: url('./carrocel2.webp');">
+             <div class="slide" style="background-image: url('./CULTO\ FAMILIA.webp');">
                 <div class="carousel-content">
-                    <span class="badge">Família</span>
-                    <h2>Restaurando Laços Perdidos</h2>
+                    <span class="badge">CULTO</span>
+                    <h2>DA FAMILIA</h2>
                 </div>
             </div>
-             <div class="slide" style="background-image: url('./carrocel2.webp');">
+             <div class="slide" style="background-image: url('./CAMPANHA.webp');">
                 <div class="carousel-content">
-                    <span class="badge">Família</span>
-                    <h2>Restaurando Laços Perdidos</h2>
+                    <span class="badge">CULTO</span>
+                    <h2>DE CAMPANHA</h2>
                 </div>
             </div>
-             <div class="slide" style="background-image: url('./carrocel2.webp');">
+             <div class="slide" style="background-image: url('./SANTA\ CEIA.webp');">
                 <div class="carousel-content">
-                    <span class="badge">Família</span>
-                    <h2>Restaurando Laços Perdidos</h2>
+                    <span class="badge">CULTO</span>
+                    <h2>DA SANTA CEIA</h2>
                 </div>
             </div>
-             <div class="slide" style="background-image: url('./carrocel2.webp');">
+             <div class="slide" style="background-image: url('./LOVOR.webp');">
                 <div class="carousel-content">
-                    <span class="badge">Família</span>
-                    <h2>Restaurando Laços Perdidos</h2>
+                    <span class="badge">CULTO</span>
+                    <h2>DE LOUVOR</h2>
                 </div>
             </div>
+            
             <div class="carousel-indicators">
                 <div class="indicator active"></div>
                 <div class="indicator"></div>
@@ -430,20 +456,29 @@
     <footer id="footer">
         <div class="footer-grid">
             <div class="footer-item">
+                <h4>REDES SOCIAIS</h4>
+                <a href="https://www.instagram.com/marcio.oficial.nascimento/"> <p>Pr. Pres.marcio</p></a> 
+                <a href="https://www.instagram.com/silvana_keller123/"> <p>Miss.silvana</p></a> 
+                <a href="https://www.instagram.com/silviorodrigues527/"> <p>Pr.Cop.silvio rodrigues</p></a> 
+            </div>
+            <div class="footer-item">
                 <h4>Contato</h4>
-                <p>📍 Endereço da Igreja</p>
+                <p>📍 ENDEREÇO DA IGREJA</p>
+                <p>RUA RAMONDETT GIACOMO 321 - VILA DALVA</p>
                 <p>📞 WhatsApp: (11) 99999-9999</p>
             </div>
             <div class="footer-item">
                 <h4>DIAS E HORARIOS DOS CULTOS</h4>
-                <p>SEGUNDA - CURA E LIBERTAÇÃO</p>
-                <p>QUARTA - TERAPIA DO AMOR</p>
-                <p>SEXTA - VIGILIA</p>
-                <p>DOMINGO - CULTO DA FAMILIA</p>
+                <p>1º DOMINGO 18:30 - SANTA CEIA</p>
+                <p>DOMINGOS 20h00 - CULTO DA FAMILIA</p>
+                <p>QUARTA 20H00 - LOUVOR E ADORAÇÃO</p>
+                <p>SEXTA 20H00 - CURA E LIBERTAÇÃO</p>
+                <p>SABADO 08H00 - CONSAGRAÇÃO</p>
             </div>
         </div>
     </footer>
 
+    <!-- MODAL DE DOAÇÃO -->
     <div class="modal-overlay" id="modalDoacao">
         <div class="modal-content">
             <button class="close-modal" id="closeDoacao">X</button>
@@ -451,30 +486,41 @@
         </div>
     </div>
 
+    <!-- POPUP DE ENTRADA -->
+    <div class="modal-overlay" id="modalWelcome">
+        <div class="modal-content">
+            <button class="close-modal" id="closeWelcome">X</button>
+            <img style="width: 100%; max-height: 500px; object-fit: contain;" src="./BANNER 1.webp" alt="Bem-vindo">
+        </div>
+    </div>
+
     <script async src="//www.instagram.com/embed.js"></script>
 
     <script>
-        // Lógica Carrossel Principal (5s) corrigida
+        window.onload = function() {
+            const modalWelcome = document.getElementById('modalWelcome');
+            const closeWelcome = document.getElementById('closeWelcome');
+            modalWelcome.style.display = 'flex';
+            closeWelcome.onclick = function() { modalWelcome.style.display = 'none'; }
+            window.onclick = function(event) {
+                if (event.target == modalWelcome) { modalWelcome.style.display = "none"; }
+            }
+        };
+
         const mainSlides = document.querySelectorAll('#universalCarousel .slide');
         const mainIndicators = document.querySelectorAll('#universalCarousel .indicator');
         let currentMainSlide = 0;
 
         function showMainSlide(index) {
-            // Remove as classes atuais
             mainSlides[currentMainSlide].classList.remove('active');
             if(mainIndicators[currentMainSlide]) mainIndicators[currentMainSlide].classList.remove('active');
-
-            // Calcula o próximo índice
             currentMainSlide = (index + mainSlides.length) % mainSlides.length;
-
-            // Adiciona as classes ao novo slide/indicador
             mainSlides[currentMainSlide].classList.add('active');
             if(mainIndicators[currentMainSlide]) mainIndicators[currentMainSlide].classList.add('active');
         }
 
         setInterval(() => showMainSlide(currentMainSlide + 1), 5000);
 
-        // Lógica Instagram
         const track = document.getElementById('videos-track');
         const nextBtn = document.getElementById('nextInstagram');
         const prevBtn = document.getElementById('prevInstagram');
@@ -487,7 +533,6 @@
                 currentScroll = Math.min(currentScroll + cardWidth, maxScroll);
                 track.style.transform = `translateX(-${currentScroll}px)`;
             });
-
             prevBtn.addEventListener('click', () => {
                 const cardWidth = track.children[0].getBoundingClientRect().width + 20;
                 currentScroll = Math.max(currentScroll - cardWidth, 0);
@@ -495,7 +540,6 @@
             });
         }
 
-        // Lógica Modal
         const btnDoacao = document.getElementById('btnDoacao');
         const modal = document.getElementById('modalDoacao');
         const btnFechar = document.getElementById('closeDoacao');
@@ -503,7 +547,6 @@
         if(btnDoacao) {
             btnDoacao.addEventListener('click', () => modal.style.display = 'flex');
             btnFechar.addEventListener('click', () => modal.style.display = 'none');
-            window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
         }
     </script>
 </body>
