@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assembleia de Deus - Missão Salvando Vidas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* RESET E ESTILOS GERAIS */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+        body { background-color: #ffffff; color: #333; line-height: 1.6; overflow-x: hidden; }
+
+        header {
+            background-color: #101c3d;
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo { color: white; font-weight: bold; font-size: 20px; text-align: center; }
+        .logo p { font-size: 10px; letter-spacing: 1px; }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px 5%;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+        }
+
+        .nav-item { text-align: center; font-size: 12px; color: #555; cursor: pointer; min-width: 60px; }
+        .nav-item i { display: block; font-size: 20px; margin-bottom: 5px; font-style: normal; }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            padding: 0 15px;
+        }
+
+        /* --- Carrossel Principal --- */
+        .carousel {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            height: 400px;
+            background-color: #000;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 30px;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            z-index: 1;
+        }
+
+        .slide.active { opacity: 1; z-index: 2; }
+        .slide::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            z-index: -1;
+        }
+
+        .badge {
+            background: #e60000;
+            color: white;
+            padding: 4px 8px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 3px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .carousel h2 { font-size: 24px; margin-bottom: 10px; }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .indicator {
+            height: 4px;
+            flex-grow: 1;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .indicator.active { background: white; }
+
+        /* --- Sidebar --- */
+        .sidebar-videos { display: flex; flex-direction: column; gap: 20px; }
+        .video-card {
+            border-radius: 15px;
+            overflow: hidden;
+            background: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+        }
+        .video-thumb {
+            width: 100%;
+            height: 150px;
+        }
+        .video-thumb iframe { width: 100%; height: 100%; border: 0; }
+        .video-info { padding: 15px; }
+        .video-info h3 { font-size: 16px; margin-bottom: 5px; }
+
+        /* --- Seção Terapia do Amor --- */
+        .terapia-section {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 15px;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; 
+            height: 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+        }
+        .terapia-text h2 { font-size: 28px; color: #101c3d; margin-bottom: 15px; }
+
+        /* --- SEÇÃO DE MEMBROS --- */
+        .members-section {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 15px;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 28px;
+            color: #101c3d;
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: #e60000;
+        }
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        .member-card {
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+        .member-card:hover { transform: translateY(-10px); }
+        .member-photo {
+            width: 100%;
+            height: 300px;
+            background-color: #eee;
+            background-size: cover;
+            background-position: center;
+        }
+        .member-info { padding: 20px; }
+        .member-info h4 {
+            font-size: 18px;
+            color: #101c3d;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .member-info p {
+            font-size: 14px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        /* --- CARROSSEL INSTAGRAM --- */
+        .instagram-carousel-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        #videos-track {
+            display: flex;
+            gap: 20px;
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(16, 28, 61, 0.8);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .arrow-left { left: 25px; }
+        .arrow-right { right: 25px; }
+
+        /* --- MODAL DOAÇÃO --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .modal-content {
+            position: relative;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 90%;
+        }
+        .close-modal {
+            position: absolute;
+            top: -15px; right: -15px;
+            background: #e60000;
+            color: white;
+            border: none;
+            width: 35px; height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: #101c3d;
+            color: white;
+            padding: 40px 5%;
+            margin-top: 50px;
+        }
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .main-container, .terapia-section, .members-grid { grid-template-columns: 1fr; }
+            .carousel { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" style=" margin: auto">
+            ♥ ASSEMBLEIA DE DEUS ♥
+            <p>MISSÃO SALVANDO VIDAS</p>
+        </div>
+        
+    </header>
+
+    <nav>
+       <a href="#"> <div class="nav-item"><i>🏠</i>Home</div></a>
+        <div class="nav-item" id="btnDoacao"><i>💰</i>Doação</div>
+      
+       <a href="#membros"> <div class="nav-item"><i>📍</i>Membros</div></a>
+        <a href="#footer"> <div class="nav-item"><i>👥</i>Endereços</div></a>
+    </nav>
+
+    <div class="main-container">
+        <div class="carousel" id="universalCarousel">
+            <div class="slide active" style="background-image: url('./carrocel1.webp');">
+                <div class="carousel-content">
+                    <span class="badge">Fé Inteligente</span>
+                    <h2>O Poder da Oração da Meia-Noite</h2>
+                </div>
+            </div>
+            <div class="slide" style="background-image: url('./carrocel2.webp');">
+                <div class="carousel-content">
+                    <span class="badge">Família</span>
+                    <h2>Restaurando Laços Perdidos</h2>
+                </div>
+            </div>
+             <div class="slide" style="background-image: url('./carrocel2.webp');">
+                <div class="carousel-content">
+                    <span class="badge">Família</span>
+                    <h2>Restaurando Laços Perdidos</h2>
+                </div>
+            </div>
+             <div class="slide" style="background-image: url('./carrocel2.webp');">
+                <div class="carousel-content">
+                    <span class="badge">Família</span>
+                    <h2>Restaurando Laços Perdidos</h2>
+                </div>
+            </div>
+             <div class="slide" style="background-image: url('./carrocel2.webp');">
+                <div class="carousel-content">
+                    <span class="badge">Família</span>
+                    <h2>Restaurando Laços Perdidos</h2>
+                </div>
+            </div>
+             <div class="slide" style="background-image: url('./carrocel2.webp');">
+                <div class="carousel-content">
+                    <span class="badge">Família</span>
+                    <h2>Restaurando Laços Perdidos</h2>
+                </div>
+            </div>
+            <div class="carousel-indicators">
+                <div class="indicator active"></div>
+                <div class="indicator"></div>
+                <div class="indicator"></div>
+                <div class="indicator"></div>
+                <div class="indicator"></div>
+                <div class="indicator"></div>
+            </div>
+        </div>
+
+        <div class="sidebar-videos">
+            <div class="video-card">
+                <div class="video-thumb">
+                    <iframe src="https://www.youtube.com/embed/5RLO5G23R2k" allowfullscreen></iframe>
+                </div>
+                <div class="video-info"><h3>Eclesiastes 7</h3></div>
+                <p style="padding: 0 15px 15px;">
+                    O bom nome é melhor do que um perfume finíssimo, e o dia da morte é melhor do que o dia do nascimento.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <section class="terapia-section">
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/xI4aqDtObPI" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="terapia-text">
+            <h2>Terapia do Amor</h2>
+            <h2>Provérbios 12:4</h2>
+            <p>4 A boa esposa é o orgulho do marido, mas a esposa que traz vergonha ao marido é como câncer nos ossos dele. </p>
+            <p>5 Quem é honesto trata todos com sinceridade, mas quem é mau vive enganando os outros.<br>
+            6 As palavras dos maus são uma armadilha mortal, mas as palavras das pessoas corretas salvam os que estão em perigo.</p>
+        </div>
+    </section>
+
+    <h3 style="text-align: center; margin-top: 40px; padding: 0 15px;">CURTA E COMPARTILHE NO INSTAGRAM</h3>
+    <div class="instagram-carousel-container">
+        <button class="carousel-arrow arrow-left" id="prevInstagram">❮</button>
+        <button class="carousel-arrow arrow-right" id="nextInstagram">❯</button>
+        <section id="videos-track">
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DTqPa6DEY2N/" data-instgrm-version="14"></blockquote>
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DTZLbaxEZ8Z/" data-instgrm-version="14"></blockquote>
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DSn4Scaka4K/" data-instgrm-version="14"></blockquote>
+        </section>
+    </div>
+
+    <section class="members-section" id="membros">
+        <h2 class="section-title">Nossos Membros</h2>
+        <div class="members-grid">
+            <div class="member-card">
+                <div class="member-photo" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400');"></div>
+                <div class="member-info">
+                    <h4>Pastor João Silva</h4>
+                    <p>Ministério de Ensino</p>
+                </div>
+            </div>
+            <div class="member-card">
+                <div class="member-photo" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400');"></div>
+                <div class="member-info">
+                    <h4>Missionária Maria</h4>
+                    <p>Ação Social</p>
+                </div>
+            </div>
+            <div class="member-card">
+                <div class="member-photo" style="background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400');"></div>
+                <div class="member-info">
+                    <h4>Presbítero Carlos</h4>
+                    <p>Coordenação de Eventos</p>
+                </div>
+            </div>
+            <div class="member-card">
+                <div class="member-photo" style="background-image: url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400');"></div>
+                <div class="member-info">
+                    <h4>Diaconisa Ana</h4>
+                    <p>Ministério de Louvor</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="footer">
+        <div class="footer-grid">
+            <div class="footer-item">
+                <h4>Contato</h4>
+                <p>📍 Endereço da Igreja</p>
+                <p>📞 WhatsApp: (11) 99999-9999</p>
+            </div>
+            <div class="footer-item">
+                <h4>DIAS E HORARIOS DOS CULTOS</h4>
+                <p>SEGUNDA - CURA E LIBERTAÇÃO</p>
+                <p>QUARTA - TERAPIA DO AMOR</p>
+                <p>SEXTA - VIGILIA</p>
+                <p>DOMINGO - CULTO DA FAMILIA</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="modalDoacao">
+        <div class="modal-content">
+            <button class="close-modal" id="closeDoacao">X</button>
+            <img style="width: 100%; max-height: 500px; object-fit: contain;" src="./DOAÇÃO.jpeg" alt="Dados para Doação">
+        </div>
+    </div>
+
+    <script async src="//www.instagram.com/embed.js"></script>
+
+    <script>
+        // Lógica Carrossel Principal (5s) corrigida
+        const mainSlides = document.querySelectorAll('#universalCarousel .slide');
+        const mainIndicators = document.querySelectorAll('#universalCarousel .indicator');
+        let currentMainSlide = 0;
+
+        function showMainSlide(index) {
+            // Remove as classes atuais
+            mainSlides[currentMainSlide].classList.remove('active');
+            if(mainIndicators[currentMainSlide]) mainIndicators[currentMainSlide].classList.remove('active');
+
+            // Calcula o próximo índice
+            currentMainSlide = (index + mainSlides.length) % mainSlides.length;
+
+            // Adiciona as classes ao novo slide/indicador
+            mainSlides[currentMainSlide].classList.add('active');
+            if(mainIndicators[currentMainSlide]) mainIndicators[currentMainSlide].classList.add('active');
+        }
+
+        setInterval(() => showMainSlide(currentMainSlide + 1), 5000);
+
+        // Lógica Instagram
+        const track = document.getElementById('videos-track');
+        const nextBtn = document.getElementById('nextInstagram');
+        const prevBtn = document.getElementById('prevInstagram');
+        let currentScroll = 0;
+
+        if(nextBtn && prevBtn) {
+            nextBtn.addEventListener('click', () => {
+                const cardWidth = track.children[0].getBoundingClientRect().width + 20;
+                const maxScroll = track.scrollWidth - track.parentElement.clientWidth;
+                currentScroll = Math.min(currentScroll + cardWidth, maxScroll);
+                track.style.transform = `translateX(-${currentScroll}px)`;
+            });
+
+            prevBtn.addEventListener('click', () => {
+                const cardWidth = track.children[0].getBoundingClientRect().width + 20;
+                currentScroll = Math.max(currentScroll - cardWidth, 0);
+                track.style.transform = `translateX(-${currentScroll}px)`;
+            });
+        }
+
+        // Lógica Modal
+        const btnDoacao = document.getElementById('btnDoacao');
+        const modal = document.getElementById('modalDoacao');
+        const btnFechar = document.getElementById('closeDoacao');
+
+        if(btnDoacao) {
+            btnDoacao.addEventListener('click', () => modal.style.display = 'flex');
+            btnFechar.addEventListener('click', () => modal.style.display = 'none');
+            window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+        }
+    </script>
+</body>
+</html>
